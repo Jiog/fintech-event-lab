@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+project_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+if [ -x "$project_dir/.tools/jdk/Contents/Home/bin/java" ]; then
+    export JAVA_HOME="$project_dir/.tools/jdk/Contents/Home"
+fi
+export MAVEN_USER_HOME="$project_dir/.maven-home"
+cd "$project_dir"
+exec ./mvnw --settings "$project_dir/.mvn/settings.xml" \
+    --global-settings "$project_dir/.mvn/settings.xml" \
+    "-Dmaven.repo.local=$project_dir/.maven-home/repository" "$@"
